@@ -1,8 +1,8 @@
 # Contract Freeze – Gym Management System
 
-**Frozen on:** [insert date]
+**Frozen on:** 6 October 2026
 
-This folder contains the agreed contracts for the entire project.  
+This folder contains the agreed contracts for the entire project.
 All backend and frontend work must be built against these contracts.
 
 ## Rules
