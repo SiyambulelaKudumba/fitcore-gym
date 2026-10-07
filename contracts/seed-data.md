@@ -1,35 +1,52 @@
 Seed Data
+
 Created on first run by DbSeeder in backend/FitCore.Api/Data/.
 These are the default rows inserted when the database is empty.
 
-Users
-Email	Password	Role
-admin@fitcore.co.za	Admin@123	Admin
-member@fitcore.co.za	Member@123	Member
-trainer@fitcore.co.za	Trainer@123	Trainer
-Members
-Id	FirstName	LastName	Email	Phone
-1	Test	Member	member@fitcore.co.za	0821234567
-2	Sarah	Naidoo	sarah@fitcore.co.za	0839876543
-Trainers
-Id	FirstName	LastName	Email	Speciality
-1	Thabo	Mokoena	thabo@fitcore.co.za	Strength
-2	Aisha	Patel	aisha@fitcore.co.za	Yoga and Pilates
-3	Sipho	Dlamini	sipho@fitcore.co.za	Boxing
-Classes
-Id	Name	TrainerId	Day	Time	Capacity	Booked
-1	Spin	1	Monday	18:00	20	12
-2	Yoga	2	Tuesday	07:00	15	15
-3	Boxing	3	Wednesday	17:30	12	4
-4	Pilates	2	Thursday	09:00	18	9
-5	CrossFit	1	Friday	16:00	25	25
-Bookings
-Id	MemberId	ClassId	Status
-1	1	1	Booked
-2	1	3	Booked
-Notes
-Yoga is full (15 of 15 booked).
+## Users
+| Email | Password | Role |
+|-------|----------|------|
+| admin@fitcore.co.za | Admin@123 | Admin |
+| member@fitcore.co.za | Member@123 | Member |
+| trainer@fitcore.co.za | Trainer@123 | Trainer |
+| sarah@fitcore.co.za | Member@123 | Member |
+| aisha@fitcore.co.za | Trainer@123 | Trainer |
 
-CrossFit is full (25 of 25 booked).
+## Members
+| Id | MemberNumber | FirstName | LastName | Gender | DateOfBirth | HomeAddress | Email | Phone | MembershipType | TrainerId | TrainingProgrammeId |
+|----|--------------|-----------|----------|--------|-------------|-------------|-------|-------|----------------|-----------|---------------------|
+| 1 | M0001 | Test | Member | Male | 1990-01-01 | 123 Main St | member@fitcore.co.za | 0821234567 | Monthly | 1 | 1 |
+| 2 | M0002 | Sarah | Naidoo | Female | 1992-05-15 | 45 Oak Ave | sarah@fitcore.co.za | 0839876543 | Quarterly | 2 | 2 |
 
-Use these to test the "Class Full" state on the Classes page.
+## Trainers
+| Id | StaffNumber | FirstName | LastName | Gender | Email | Phone | Specialization |
+|----|-------------|-----------|----------|--------|-------|-------|----------------|
+| 1 | T0001 | Thabo | Mokoena | Male | thabo@fitcore.co.za | 0711111111 | StrengthAndConditioning |
+| 2 | T0002 | Aisha | Patel | Female | aisha@fitcore.co.za | 0722222222 | GeneralFitness |
+
+## Training Programmes
+| Id | Name | Description | Duration | FitnessGoal |
+|----|------|-------------|----------|-------------|
+| 1 | Weight Loss | Fat loss and cardio plan | 12 weeks | WeightLoss |
+| 2 | Muscle Building | Hypertrophy focused plan | 8 weeks | MuscleBuilding |
+| 3 | General Fitness | Balanced fitness plan | 6 weeks | GeneralFitness |
+
+## Workout Plans
+| Id | Name | MemberId | TrainerId | TrainingProgrammeId | CreatedDate |
+|----|------|----------|-----------|---------------------|-------------|
+| 1 | Test Member Weight Loss Plan | 1 | 1 | 1 | 2026-10-06 |
+| 2 | Sarah Muscle Building Plan | 2 | 2 | 2 | 2026-10-06 |
+
+## Workout Tasks
+| Id | ExerciseName | Description | Sets | Reps | DueDate | Status | WorkoutPlanId |
+|----|--------------|-------------|------|------|---------|--------|---------------|
+| 1 | Treadmill Run | Run at moderate pace | 1 | 1 | 2026-10-15 | NotStarted | 1 |
+| 2 | Squats | Keep back straight | 3 | 12 | 2026-10-16 | InProgress | 1 |
+| 3 | Plank | Hold for 60 seconds | 3 | 1 | 2026-10-17 | Complete | 1 |
+| 4 | Bench Press | Warm up first | 4 | 8 | 2026-10-18 | NotStarted | 2 |
+
+## Notes
+- Test member has tasks in all three statuses to test filtering.
+- Use member@fitcore.co.za / Member@123 to test member dashboard.
+- Use trainer@fitcore.co.za / Trainer@123 to test trainer dashboard.
+- Use admin@fitcore.co.za / Admin@123 to test admin dashboard.

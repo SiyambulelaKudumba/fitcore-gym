@@ -1,18 +1,50 @@
-Enums
-Location: backend/FitCore.Api/Models/Enums.cs
+# Enums
 
-UserRole
+Location: `backend/FitCore.Api/Models/Enums.cs`
+
 public enum UserRole
 {
-Admin,
-Member,
-Trainer
+    Admin,
+    Member,
+    Trainer
 }
 
-BookingStatus
-public enum BookingStatus
+public enum Gender
 {
-Booked,
-Cancelled,
-Attended
+    Male,
+    Female,
+    Other,
+    PreferNotToSay
+}
+
+public enum MembershipType
+{
+    Monthly,
+    Quarterly,
+    Annual
+}
+
+public enum Specialization
+{
+    WeightTraining,
+    Cardio,
+    StrengthAndConditioning,
+    GeneralFitness,
+    WeightLoss
+}
+
+public enum FitnessGoal
+{
+    WeightLoss,
+    MuscleBuilding,
+    GeneralFitness,
+    Strength,
+    Endurance
+}
+
+public enum WorkoutTaskStatus
+{
+    NotStarted,
+    InProgress,
+    Complete
 }

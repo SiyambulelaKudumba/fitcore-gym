@@ -12,49 +12,78 @@ EF Core Code-First generates the tables from these classes.
 | FirstName | string | Required, max 50 |
 | LastName | string | Required, max 50 |
 | Role | UserRole | Admin / Member / Trainer |
+| MemberId | int? | Optional link to Member |
+| TrainerId | int? | Optional link to Trainer |
 
 ## Member
 | Field | Type | Notes |
 |-------|------|-------|
 | Id | int | Primary key |
+| MemberNumber | string | Required, unique, max 20 |
 | FirstName | string | Required, max 50 |
 | LastName | string | Required, max 50 |
+| Gender | Gender | Required |
+| DateOfBirth | DateTime | Required |
+| HomeAddress | string | Required, max 200 |
 | Email | string | Required, email format, unique |
 | PhoneNumber | string | Optional, max 15 |
+| MembershipType | MembershipType | Monthly / Quarterly / Annual |
 | JoinDate | DateTime | Defaults to today |
-| UserId | string | Foreign key to ApplicationUser |
+| TrainerId | int? | Foreign key to Trainer |
+| TrainingProgrammeId | int? | Foreign key to TrainingProgramme |
+| UserId | string? | Foreign key to ApplicationUser |
 
 ## Trainer
 | Field | Type | Notes |
 |-------|------|-------|
 | Id | int | Primary key |
+| StaffNumber | string | Required, unique, max 20 |
 | FirstName | string | Required, max 50 |
 | LastName | string | Required, max 50 |
-| Email | string | Required, email format |
-| Speciality | string | Optional, max 100 |
+| Gender | Gender | Required |
+| Email | string | Required, email format, unique |
+| PhoneNumber | string | Optional, max 15 |
+| Specialization | Specialization | Required |
+| UserId | string? | Foreign key to ApplicationUser |
 
-## GymClass
+## TrainingProgramme
 | Field | Type | Notes |
 |-------|------|-------|
 | Id | int | Primary key |
-| Name | string | Required, max 50 |
-| TrainerId | int | Foreign key to Trainer |
-| Day | string | Monday–Saturday |
-| Time | string | "HH:mm" format, e.g. "18:00" |
-| Capacity | int | 1–50 |
-| Booked | int | Count of active bookings |
+| Name | string | Required, max 100 |
+| Description | string | Optional, max 500 |
+| Duration | string | Required, max 50, e.g. "12 weeks" |
+| FitnessGoal | FitnessGoal | Required |
 
-## Booking
+## WorkoutPlan
 | Field | Type | Notes |
 |-------|------|-------|
 | Id | int | Primary key |
+| Name | string | Required, max 100 |
+| Description | string | Optional, max 500 |
 | MemberId | int | Foreign key to Member |
-| ClassId | int | Foreign key to GymClass |
-| BookingDate | DateTime | Defaults to today |
-| Status | BookingStatus | Booked / Cancelled / Attended |
+| TrainerId | int | Foreign key to Trainer |
+| TrainingProgrammeId | int | Foreign key to TrainingProgramme |
+| CreatedDate | DateTime | Defaults to today |
+
+## WorkoutTask
+| Field | Type | Notes |
+|-------|------|-------|
+| Id | int | Primary key, auto-generated |
+| ExerciseName | string | Required, max 100 |
+| Description | string | Optional, max 500 |
+| NumberOfSets | int | Required, 1–20 |
+| NumberOfRepetitions | int | Required, 1–100 |
+| DueDate | DateTime | Required |
+| Status | WorkoutTaskStatus | NotStarted / InProgress / Complete |
+| WorkoutPlanId | int | Foreign key to WorkoutPlan |
 
 ## Relationships
-- ApplicationUser 1 ── 1 Member
-- Trainer 1 ── * GymClass
-- Member 1 ── * Booking
-- GymClass 1 ── * Booking
+- ApplicationUser 1 ── 0..1 Member
+- ApplicationUser 1 ── 0..1 Trainer
+- Trainer 1 ── * Member
+- TrainingProgramme 1 ── * Member
+- TrainingProgramme 1 ── * WorkoutPlan
+- Member 1 ── * WorkoutPlan
+- Trainer 1 ── * WorkoutPlan
+- WorkoutPlan 1 ── * WorkoutTask
