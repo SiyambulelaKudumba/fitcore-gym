@@ -11,6 +11,7 @@ React Routes
 | /admin/members | MembersPage | Admin | Manage members + search |
 | /admin/trainers | TrainersPage | Admin | Manage trainers + search |
 | /admin/programmes | ProgrammesPage | Admin | Manage training programmes |
+| /admin/users | UsersByTypePage | Admin | List members and trainers by type |
 | /trainer/members | TrainerMembersPage | Trainer | View assigned members |
 | /trainer/plans | TrainerPlansPage | Trainer | Create/manage workout plans |
 | /trainer/tasks | TrainerTasksPage | Trainer | Create/manage workout tasks |
@@ -19,8 +20,8 @@ React Routes
 | /member/tasks | MemberTasksPage | Member | View tasks, update status, filter |
 | /member/tasks?status=InProgress | MemberTasksPage | Member | Filter by status |
 | /programmes | ProgrammesPage | Admin, Trainer, Member | View programmes |
-| /workoutplans | WorkoutPlansPage | Admin, Trainer, Member | View workout plans |
-| /workouttasks | WorkoutTasksPage | Admin, Trainer, Member | View workout tasks |
+| /workoutplans | WorkoutPlansPage | Admin | View all workout plans |
+| /workouttasks | WorkoutTasksPage | Admin | View all workout tasks |
 | * | NotFoundPage | Public | 404 |
 
 ## Guard rules
@@ -36,15 +37,18 @@ React Routes
 - Public: Home, Login, Register
 - Member: Dashboard, My Programme, My Plans, My Tasks, Logout
 - Trainer: Dashboard, My Members, Workout Plans, Workout Tasks, Logout
-- Admin: Dashboard, Members, Trainers, Programmes, Workout Plans, Logout
+- Admin: Dashboard, Members, Trainers, Programmes, Users, Workout Plans, Workout Tasks, Logout
 
 ## Routes to add in App.js
 <Route path="/admin/members" element={<MembersPage />} />
 <Route path="/admin/trainers" element={<TrainersPage />} />
 <Route path="/admin/programmes" element={<ProgrammesPage />} />
+<Route path="/admin/users" element={<UsersByTypePage />} />
 <Route path="/trainer/members" element={<TrainerMembersPage />} />
 <Route path="/trainer/plans" element={<TrainerPlansPage />} />
 <Route path="/trainer/tasks" element={<TrainerTasksPage />} />
 <Route path="/member/programme" element={<MemberProgrammePage />} />
 <Route path="/member/plans" element={<MemberPlansPage />} />
 <Route path="/member/tasks" element={<MemberTasksPage />} />
+<Route path="/workoutplans" element={<WorkoutPlansPage />} />
+<Route path="/workouttasks" element={<WorkoutTasksPage />} />

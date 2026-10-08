@@ -51,8 +51,10 @@ Returns the same shape as login (token + user).
 - Every axios request adds: Authorization: Bearer <token>
 
 ## Seed users
-| Email | Password | Role |
-|-------|----------|------|
-| admin@fitcore.co.za | Admin@123 | Admin |
-| member@fitcore.co.za | Member@123 | Member |
-| trainer@fitcore.co.za | Trainer@123 | Trainer |
+| Email | Password | Role | Linked MemberId | Linked TrainerId |
+|-------|----------|------|-----------------|------------------|
+| admin@fitcore.co.za | Admin@123 | Admin | null | null |
+| member@fitcore.co.za | Member@123 | Member | 1 | null |
+| sarah@fitcore.co.za | Member@123 | Member | 2 | null |
+| trainer@fitcore.co.za | Trainer@123 | Trainer | null | 1 |
+| aisha@fitcore.co.za | Trainer@123 | Trainer | null | 2 |

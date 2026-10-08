@@ -4,13 +4,13 @@ Created on first run by DbSeeder in backend/FitCore.Api/Data/.
 These are the default rows inserted when the database is empty.
 
 ## Users
-| Email | Password | Role |
-|-------|----------|------|
-| admin@fitcore.co.za | Admin@123 | Admin |
-| member@fitcore.co.za | Member@123 | Member |
-| trainer@fitcore.co.za | Trainer@123 | Trainer |
-| sarah@fitcore.co.za | Member@123 | Member |
-| aisha@fitcore.co.za | Trainer@123 | Trainer |
+| Email | Password | Role | MemberId | TrainerId |
+|-------|----------|------|----------|-----------|
+| admin@fitcore.co.za | Admin@123 | Admin | null | null |
+| member@fitcore.co.za | Member@123 | Member | 1 | null |
+| sarah@fitcore.co.za | Member@123 | Member | 2 | null |
+| trainer@fitcore.co.za | Trainer@123 | Trainer | null | 1 |
+| aisha@fitcore.co.za | Trainer@123 | Trainer | null | 2 |
 
 ## Members
 | Id | MemberNumber | FirstName | LastName | Gender | DateOfBirth | HomeAddress | Email | Phone | MembershipType | TrainerId | TrainingProgrammeId |
@@ -21,7 +21,7 @@ These are the default rows inserted when the database is empty.
 ## Trainers
 | Id | StaffNumber | FirstName | LastName | Gender | Email | Phone | Specialization |
 |----|-------------|-----------|----------|--------|-------|-------|----------------|
-| 1 | T0001 | Thabo | Mokoena | Male | thabo@fitcore.co.za | 0711111111 | StrengthAndConditioning |
+| 1 | T0001 | Thabo | Mokoena | Male | trainer@fitcore.co.za | 0711111111 | StrengthAndConditioning |
 | 2 | T0002 | Aisha | Patel | Female | aisha@fitcore.co.za | 0722222222 | GeneralFitness |
 
 ## Training Programmes
@@ -50,3 +50,5 @@ These are the default rows inserted when the database is empty.
 - Use member@fitcore.co.za / Member@123 to test member dashboard.
 - Use trainer@fitcore.co.za / Trainer@123 to test trainer dashboard.
 - Use admin@fitcore.co.za / Admin@123 to test admin dashboard.
+- Thabo Mokoena (Trainer Id 1) is linked to trainer@fitcore.co.za.
+- Aisha Patel (Trainer Id 2) is linked to aisha@fitcore.co.za.

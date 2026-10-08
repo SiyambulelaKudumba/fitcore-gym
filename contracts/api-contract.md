@@ -61,6 +61,7 @@ Roles: Public = no token | Member | Admin | Trainer
 ## Workout Tasks
 | Method | Route | Role | Request | Response |
 |--------|-------|------|---------|----------|
+| GET | /workouttasks | Admin | - | 200 WorkoutTaskDto[] |
 | GET | /workouttasks/plan/{planId} | Admin, Trainer, Member (own) | ?status=NotStarted\|InProgress\|Complete | 200 WorkoutTaskDto[] |
 | GET | /workouttasks/{id} | Admin, Trainer, Member (own) | - | 200 WorkoutTaskDto / 404 |
 | POST | /workouttasks | Trainer, Admin | CreateWorkoutTaskDto | 201 WorkoutTaskDto / 400 |
