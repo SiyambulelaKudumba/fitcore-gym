@@ -1,10 +1,12 @@
 using FitCore.Api.Data;
 using FitCore.Api.Models;
+using FitCore.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Environment.EnvironmentName = "Development";
@@ -15,7 +17,40 @@ builder.WebHost.UseUrls("https://localhost:7001", "http://localhost:7000");
 // Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "FitCore.Api",
+        Version = "v1"
+    });
+
+    // JWT Bearer security scheme
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Enter 'Bearer' [space] and then your valid token. Example: 'Bearer eyJhbGci...'"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 // --- Database ---
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -37,6 +72,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+// --- App services ---
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 // --- JWT Bearer authentication ---
 var jwtSection = builder.Configuration.GetSection("Jwt");
@@ -84,6 +122,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// --- Seed database (roles, users, sample data) ---
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedAsync(scope.ServiceProvider);
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
