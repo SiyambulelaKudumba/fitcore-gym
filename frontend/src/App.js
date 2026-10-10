@@ -1,47 +1,65 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import MemberDashboard from './pages/MemberDashboard';
-import MemberTasksPage from './pages/MemberTasksPage';
-import MemberPlansPage from './pages/MemberPlansPage';
-import MemberProgrammePage from './pages/MemberProgrammePage';
-import TrainerDashboard from './pages/TrainerDashboard';
-import TrainerMembersPage from './pages/TrainerMembersPage';
-import TrainerPlansPage from './pages/TrainerPlansPage';
-import TrainerTasksPage from './pages/TrainerTasksPage';
-import AdminDashboard from './pages/AdminDashboard';
-import TrainersPage from './pages/TrainersPage';
-import ProgrammesPage from './pages/ProgrammesPage';
-import UsersByTypePage from './pages/UsersByTypePage';
-import WorkoutPlansPage from './pages/WorkoutPlansPage';
-import WorkoutTasksPage from './pages/WorkoutTasksPage';
-import MembersPage from './pages/MembersPage';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import NotFoundPage from "./pages/NotFoundPage";
+
+import AdminDashboard from "./pages/AdminDashboard";
+import MembersPage from "./pages/MembersPage";
+import TrainersPage from "./pages/TrainersPage";
+import ProgrammesPage from "./pages/ProgrammesPage";
+import UsersByTypePage from "./pages/UsersByTypePage";
+
+import TrainerDashboard from "./pages/TrainerDashboard";
+import TrainerMembersPage from "./pages/TrainerMembersPage";
+import TrainerPlansPage from "./pages/TrainerPlansPage";
+import TrainerTasksPage from "./pages/TrainerTasksPage";
+
+import MemberDashboard from "./pages/MemberDashboard";
+import MemberProgrammePage from "./pages/MemberProgrammePage";
+import MemberPlansPage from "./pages/MemberPlansPage";
+import MemberTasksPage from "./pages/MemberTasksPage";
+
+import WorkoutPlansPage from "./pages/WorkoutPlansPage";
+import WorkoutTasksPage from "./pages/WorkoutTasksPage";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-        <Route path="/member" element={<MemberDashboard />} />
-        <Route path="/member/tasks" element={<MemberTasksPage />} />
-        <Route path="/member/plans" element={<MemberPlansPage />} />
-        <Route path="/member/programme" element={<MemberProgrammePage />} />
+          <Route path="/admin" element={<ProtectedRoute roles={["Admin"]}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/members" element={<ProtectedRoute roles={["Admin"]}><MembersPage /></ProtectedRoute>} />
+          <Route path="/admin/trainers" element={<ProtectedRoute roles={["Admin"]}><TrainersPage /></ProtectedRoute>} />
+          <Route path="/admin/programmes" element={<ProtectedRoute roles={["Admin"]}><ProgrammesPage /></ProtectedRoute>} />
+          <Route path="/admin/users" element={<ProtectedRoute roles={["Admin"]}><UsersByTypePage /></ProtectedRoute>} />
 
-        <Route path="/trainer" element={<TrainerDashboard />} />
-        <Route path="/trainer/members" element={<TrainerMembersPage />} />
-        <Route path="/trainer/plans" element={<TrainerPlansPage />} />
-        <Route path="/trainer/tasks" element={<TrainerTasksPage />} />
+          <Route path="/trainer" element={<ProtectedRoute roles={["Trainer"]}><TrainerDashboard /></ProtectedRoute>} />
+          <Route path="/trainer/members" element={<ProtectedRoute roles={["Trainer"]}><TrainerMembersPage /></ProtectedRoute>} />
+          <Route path="/trainer/plans" element={<ProtectedRoute roles={["Trainer"]}><TrainerPlansPage /></ProtectedRoute>} />
+          <Route path="/trainer/tasks" element={<ProtectedRoute roles={["Trainer"]}><TrainerTasksPage /></ProtectedRoute>} />
 
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/members" element={<MembersPage />} />
-        <Route path="/admin/trainers" element={<TrainersPage />} />
-        <Route path="/admin/programmes" element={<ProgrammesPage />} />
-        <Route path="/admin/users" element={<UsersByTypePage />} />
+          <Route path="/member" element={<ProtectedRoute roles={["Member"]}><MemberDashboard /></ProtectedRoute>} />
+          <Route path="/member/programme" element={<ProtectedRoute roles={["Member"]}><MemberProgrammePage /></ProtectedRoute>} />
+          <Route path="/member/plans" element={<ProtectedRoute roles={["Member"]}><MemberPlansPage /></ProtectedRoute>} />
+          <Route path="/member/tasks" element={<ProtectedRoute roles={["Member"]}><MemberTasksPage /></ProtectedRoute>} />
 
-        <Route path="/workoutplans" element={<WorkoutPlansPage />} />
-        <Route path="/workouttasks" element={<WorkoutTasksPage />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="/workoutplans" element={<ProtectedRoute roles={["Admin", "Trainer"]}><WorkoutPlansPage /></ProtectedRoute>} />
+          <Route path="/workouttasks" element={<ProtectedRoute roles={["Admin", "Trainer"]}><WorkoutTasksPage /></ProtectedRoute>} />
+
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
