@@ -1,169 +1,115 @@
-import { useEffect, useState } from "react";
-import { Container, Button, Form as BSForm, Row, Col } from "react-bootstrap";
-import Table from "../components/Table";
-import Modal from "../components/Modal";
-import ErrorAlert from "../components/ErrorAlert";
-import LoadingSpinner from "../components/LoadingSpinner";
-import { getTrainers, createTrainer, updateTrainer, deleteTrainer } from "../services/trainerService";
+import { useEffect, useState } from 'react';
+import { Container, Table, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import trainerService from '../services/trainerService';
 
-const emptyForm = {
-  staffNumber: "", firstName: "", lastName: "", gender: "Male",
-  email: "", phoneNumber: "", specialization: "GeneralFitness",
-};
+const GENDER_OPTIONS = ['Male', 'Female', 'Other', 'PreferNotToSay'];
+const SPECIALIZATION_OPTIONS = ['WeightTraining', 'Cardio', 'StrengthAndConditioning', 'GeneralFitness', 'WeightLoss'];
+const SEARCH_BY_OPTIONS = [{ value: 'staffNumber', label: 'Staff Number' }, { value: 'name', label: 'Name' }, { value: 'surname', label: 'Surname' }];
+const EMPTY_FORM = { staffNumber: '', firstName: '', lastName: '', gender: 'Male', email: '', phoneNumber: '', specialization: 'GeneralFitness' };
 
-const specializations = [
-  "WeightTraining", "Cardio", "StrengthAndConditioning", "GeneralFitness", "WeightLoss",
-];
-
-export default function TrainersPage() {
+const TrainersPage = () => {
   const [trainers, setTrainers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("name");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [search, setSearch] = useState('');
+  const [searchBy, setSearchBy] = useState('name');
   const [showModal, setShowModal] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [formError, setFormError] = useState('');
+  const [saving, setSaving] = useState(false);
 
-  const load = async () => {
-    setLoading(true);
-    try {
-      const data = await getTrainers(search, searchBy);
-      setTrainers(data);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to load trainers.");
-    } finally {
-      setLoading(false);
-    }
+  const loadTrainers = async () => {
+    setLoading(true); setError('');
+    try { setTrainers(await trainerService.getAll(search, searchBy)); }
+    catch (err) { setError(err.response?.data?.message || 'Could not load trainers.'); }
+    finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, [search, searchBy]);
+  useEffect(() => { loadTrainers(); }, [search, searchBy]);
 
-  const openAdd = () => { setEditing(null); setForm(emptyForm); setShowModal(true); };
-
-  const openEdit = (t) => {
-    setEditing(t);
-    setForm({ ...t, phoneNumber: t.phoneNumber || "" });
-    setShowModal(true);
-  };
-
-  const handleSave = async () => {
-    setError("");
-    try {
-      if (editing) await updateTrainer(editing.id, form);
-      else await createTrainer(form);
-      setShowModal(false);
-      load();
-    } catch (err) {
-      setError(err.response?.data?.message || "Save failed.");
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (!window.confirm("Delete this trainer?")) return;
-    try { await deleteTrainer(id); load(); }
-    catch (err) { setError(err.response?.data?.message || "Delete failed."); }
+  const openCreateModal = () => { setEditingId(null); setForm(EMPTY_FORM); setFormError(''); setShowModal(true); };
+  const openEditModal = (trainer) => {
+    setEditingId(trainer.id);
+    setForm({ staffNumber: trainer.staffNumber || '', firstName: trainer.firstName, lastName: trainer.lastName, gender: trainer.gender, email: trainer.email, phoneNumber: trainer.phoneNumber || '', specialization: trainer.specialization });
+    setFormError(''); setShowModal(true);
   };
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const columns = [
-    { key: "staffNumber", label: "Staff #" },
-    { key: "firstName", label: "First Name" },
-    { key: "lastName", label: "Last Name" },
-    { key: "email", label: "Email" },
-    { key: "specialization", label: "Specialization" },
-  ];
+  const handleSave = async (e) => {
+    e.preventDefault(); setFormError('');
+    if (!form.firstName.trim()) return setFormError('First name is required.');
+    if (!form.lastName.trim()) return setFormError('Last name is required.');
+    if (!form.email.trim()) return setFormError('Email is required.');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) return setFormError('Email is not valid.');
+    if (form.phoneNumber && form.phoneNumber.length > 15) return setFormError('Phone number must be 15 characters or fewer.');
+    setSaving(true);
+    try {
+      const payload = { staffNumber: form.staffNumber.trim() || null, firstName: form.firstName.trim(), lastName: form.lastName.trim(), gender: form.gender, email: form.email.trim(), phoneNumber: form.phoneNumber.trim() || null, specialization: form.specialization };
+      if (editingId) await trainerService.update(editingId, payload);
+      else await trainerService.create(payload);
+      setShowModal(false); await loadTrainers();
+    } catch (err) { setFormError(err.response?.data?.message || 'Could not save trainer.'); }
+    finally { setSaving(false); }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Delete this trainer?')) return;
+    try { await trainerService.delete(id); await loadTrainers(); }
+    catch (err) { setError(err.response?.data?.message || 'Could not delete trainer.'); }
+  };
 
   return (
-    <Container className="page-container">
-      <h2>Trainers</h2>
-      <ErrorAlert message={error} onClose={() => setError("")} />
-      <Row className="mb-3">
-        <Col md={5}>
-          <BSForm.Control placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
-        </Col>
-        <Col md={3}>
-          <BSForm.Select value={searchBy} onChange={(e) => setSearchBy(e.target.value)}>
-            <option value="staffNumber">Staff Number</option>
-            <option value="name">Name</option>
-            <option value="surname">Surname</option>
-          </BSForm.Select>
-        </Col>
-        <Col md={4} className="text-end">
-          <Button onClick={openAdd}>Add Trainer</Button>
-        </Col>
-      </Row>
-
-      {loading ? <LoadingSpinner /> : (
-        <Table
-          columns={columns}
-          data={trainers}
-          actions={(row) => (
-            <>
-              <Button size="sm" variant="warning" className="me-2" onClick={() => openEdit(row)}>Edit</Button>
-              <Button size="sm" variant="danger" onClick={() => handleDelete(row.id)}>Delete</Button>
-            </>
-          )}
-        />
+    <Container className="mt-4">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h2>Trainers</h2>
+        <Button variant="primary" onClick={openCreateModal}>+ New Trainer</Button>
+      </div>
+      <div className="d-flex gap-2 mb-3" style={{ maxWidth: 600 }}>
+        <Form.Control placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
+        <Form.Select value={searchBy} onChange={(e) => setSearchBy(e.target.value)} style={{ maxWidth: 200 }}>
+          {SEARCH_BY_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+        </Form.Select>
+      </div>
+      {error && <Alert variant="danger">{error}</Alert>}
+      {loading ? <div className="text-center py-5"><Spinner animation="border" /></div> : (
+        <Table striped bordered hover responsive>
+          <thead><tr><th>Staff #</th><th>Name</th><th>Email</th><th>Phone</th><th>Specialization</th><th style={{ width: 180 }}>Actions</th></tr></thead>
+          <tbody>
+            {trainers.length === 0 ? <tr><td colSpan="6" className="text-center">No trainers found.</td></tr> : trainers.map((t) => (
+              <tr key={t.id}>
+                <td>{t.staffNumber}</td><td>{t.firstName} {t.lastName}</td><td>{t.email}</td><td>{t.phoneNumber || '—'}</td><td>{t.specialization}</td>
+                <td>
+                  <Button size="sm" variant="outline-secondary" className="me-2" onClick={() => openEditModal(t)}>Edit</Button>
+                  <Button size="sm" variant="outline-danger" onClick={() => handleDelete(t.id)}>Delete</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       )}
-
-      <Modal
-        show={showModal}
-        title={editing ? "Edit Trainer" : "Add Trainer"}
-        onClose={() => setShowModal(false)}
-        onSave={handleSave}
-      >
-        <Row>
-          <Col md={6}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>Staff Number (optional)</BSForm.Label>
-              <BSForm.Control name="staffNumber" value={form.staffNumber} onChange={handleChange} />
-            </BSForm.Group>
-          </Col>
-          <Col md={6}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>Email</BSForm.Label>
-              <BSForm.Control name="email" type="email" value={form.email} onChange={handleChange} />
-            </BSForm.Group>
-          </Col>
-          <Col md={6}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>First Name</BSForm.Label>
-              <BSForm.Control name="firstName" value={form.firstName} onChange={handleChange} />
-            </BSForm.Group>
-          </Col>
-          <Col md={6}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>Last Name</BSForm.Label>
-              <BSForm.Control name="lastName" value={form.lastName} onChange={handleChange} />
-            </BSForm.Group>
-          </Col>
-          <Col md={6}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>Gender</BSForm.Label>
-              <BSForm.Select name="gender" value={form.gender} onChange={handleChange}>
-                <option>Male</option><option>Female</option>
-                <option>Other</option><option>PreferNotToSay</option>
-              </BSForm.Select>
-            </BSForm.Group>
-          </Col>
-          <Col md={6}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>Phone (optional)</BSForm.Label>
-              <BSForm.Control name="phoneNumber" value={form.phoneNumber} onChange={handleChange} />
-            </BSForm.Group>
-          </Col>
-          <Col md={12}>
-            <BSForm.Group className="mb-2">
-              <BSForm.Label>Specialization</BSForm.Label>
-              <BSForm.Select name="specialization" value={form.specialization} onChange={handleChange}>
-                {specializations.map((s) => <option key={s}>{s}</option>)}
-              </BSForm.Select>
-            </BSForm.Group>
-          </Col>
-        </Row>
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Form onSubmit={handleSave}>
+          <Modal.Header closeButton><Modal.Title>{editingId ? 'Edit Trainer' : 'New Trainer'}</Modal.Title></Modal.Header>
+          <Modal.Body>
+            {formError && <Alert variant="danger">{formError}</Alert>}
+            <Form.Group className="mb-3"><Form.Label>Staff Number</Form.Label><Form.Control name="staffNumber" value={form.staffNumber} onChange={handleChange} placeholder="Auto-generated if left blank" /></Form.Group>
+            <div className="d-flex gap-3">
+              <Form.Group className="mb-3 flex-fill"><Form.Label>First Name *</Form.Label><Form.Control name="firstName" value={form.firstName} onChange={handleChange} required /></Form.Group>
+              <Form.Group className="mb-3 flex-fill"><Form.Label>Last Name *</Form.Label><Form.Control name="lastName" value={form.lastName} onChange={handleChange} required /></Form.Group>
+            </div>
+            <Form.Group className="mb-3"><Form.Label>Gender *</Form.Label><Form.Select name="gender" value={form.gender} onChange={handleChange}>{GENDER_OPTIONS.map((g) => <option key={g} value={g}>{g}</option>)}</Form.Select></Form.Group>
+            <Form.Group className="mb-3"><Form.Label>Email *</Form.Label><Form.Control type="email" name="email" value={form.email} onChange={handleChange} required /></Form.Group>
+            <Form.Group className="mb-3"><Form.Label>Phone Number</Form.Label><Form.Control name="phoneNumber" value={form.phoneNumber} onChange={handleChange} maxLength={15} placeholder="Optional" /></Form.Group>
+            <Form.Group className="mb-3"><Form.Label>Specialization *</Form.Label><Form.Select name="specialization" value={form.specialization} onChange={handleChange}>{SPECIALIZATION_OPTIONS.map((s) => <option key={s} value={s}>{s}</option>)}</Form.Select></Form.Group>
+          </Modal.Body>
+          <Modal.Footer><Button variant="secondary" onClick={() => setShowModal(false)} disabled={saving}>Cancel</Button><Button type="submit" variant="primary" disabled={saving}>{saving ? 'Saving...' : editingId ? 'Update' : 'Create'}</Button></Modal.Footer>
+        </Form>
       </Modal>
     </Container>
   );
-}
+};
+
+export default TrainersPage;

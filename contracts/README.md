@@ -1,8 +1,9 @@
-# Contract Freeze – Gym Management System
+# Contract Freeze – FitCore Gym Management System
 
-**Frozen on:** [insert date]
+**Frozen on:** 6 October 2026  
+**Updated:** 8 October 2026 (consistency fixes)
 
-This folder contains the agreed contracts for the entire project.  
+This folder contains the agreed contracts for the entire project.
 All backend and frontend work must be built against these contracts.
 
 ## Rules
@@ -18,6 +19,6 @@ All backend and frontend work must be built against these contracts.
 - `api-contract.md` – API routes, roles, requests, responses
 - `auth-contract.md` – Login, register, JWT claims, seed users
 - `react-routes.md` – Frontend route map and role access
-- `shared-components.md` – TypeScript props for shared React components
+- `shared-components.md` – Props for shared React components and ownership
 - `error-format.md` – Standard API error response
 - `seed-data.md` – Initial seed data
