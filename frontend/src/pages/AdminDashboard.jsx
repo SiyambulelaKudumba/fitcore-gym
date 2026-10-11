@@ -37,77 +37,27 @@ const AdminDashboard = () => {
   return (
     <Container className="mt-4">
       <h2 className="mb-4">Admin Dashboard</h2>
-
       {error && <Alert variant="danger">{error}</Alert>}
-
       {loading ? (
         <div className="text-center py-5"><Spinner animation="border" /></div>
       ) : (
         <>
           <Row className="mb-4">
             <Col md={4}>
-              <Card className="text-center">
-                <Card.Body>
-                  <Card.Title>Members</Card.Title>
-                  <Card.Text className="fs-3">{memberCount}</Card.Text>
-                </Card.Body>
-              </Card>
+              <Card className="text-center"><Card.Body><Card.Title>Members</Card.Title><Card.Text className="fs-3">{memberCount}</Card.Text></Card.Body></Card>
             </Col>
             <Col md={4}>
-              <Card className="text-center">
-                <Card.Body>
-                  <Card.Title>Trainers</Card.Title>
-                  <Card.Text className="fs-3">{trainerCount}</Card.Text>
-                </Card.Body>
-              </Card>
+              <Card className="text-center"><Card.Body><Card.Title>Trainers</Card.Title><Card.Text className="fs-3">{trainerCount}</Card.Text></Card.Body></Card>
             </Col>
             <Col md={4}>
-              <Card className="text-center">
-                <Card.Body>
-                  <Card.Title>Programmes</Card.Title>
-                  <Card.Text className="fs-3">{programmeCount}</Card.Text>
-                </Card.Body>
-              </Card>
+              <Card className="text-center"><Card.Body><Card.Title>Programmes</Card.Title><Card.Text className="fs-3">{programmeCount}</Card.Text></Card.Body></Card>
             </Col>
           </Row>
-
           <Row>
-            <Col md={3}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Members</Card.Title>
-                  <Card.Text>Manage gym members.</Card.Text>
-                  <Link to="/admin/members" className="btn btn-primary">Go</Link>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Trainers</Card.Title>
-                  <Card.Text>Manage personal trainers.</Card.Text>
-                  <Link to="/admin/trainers" className="btn btn-primary">Go</Link>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Programmes</Card.Title>
-                  <Card.Text>Manage training programmes.</Card.Text>
-                  <Link to="/admin/programmes" className="btn btn-primary">Go</Link>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={3}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>All Users</Card.Title>
-                  <Card.Text>View members and trainers.</Card.Text>
-                  <Link to="/admin/users" className="btn btn-primary">Go</Link>
-                </Card.Body>
-              </Card>
-            </Col>
+            <Col md={3}><Card><Card.Body><Card.Title>Members</Card.Title><Link to="/admin/members" className="btn btn-primary">Go</Link></Card.Body></Card></Col>
+            <Col md={3}><Card><Card.Body><Card.Title>Trainers</Card.Title><Link to="/admin/trainers" className="btn btn-primary">Go</Link></Card.Body></Card></Col>
+            <Col md={3}><Card><Card.Body><Card.Title>Programmes</Card.Title><Link to="/admin/programmes" className="btn btn-primary">Go</Link></Card.Body></Card></Col>
+            <Col md={3}><Card><Card.Body><Card.Title>All Users</Card.Title><Link to="/admin/users" className="btn btn-primary">Go</Link></Card.Body></Card></Col>
           </Row>
         </>
       )}
