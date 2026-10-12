@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════════════════
+                    FITCORE GYM MANAGEMENT SYSTEM
+                     Group Information Document
+
+           ITP2020 Assignment 2 — Group Project (Option A)
+═══════════════════════════════════════════════════════════════════
+
+GROUP NAME: FitCore Gym Team
+
+───────────────────────────────────────────────────────────────────
+STUDENT DETAILS
+───────────────────────────────────────────────────────────────────
+
+| Student Name                  | Student Number | Signature |
+|-------------------------------|----------------|-----------|
+| Tristan Zeta Hayhurst         | s231156669     | Present   |
+| Justin Christopher Agnew      | s229355595     | Present   |
+| Jayden Ronaldo Agnew          | 229356184      | Present   |
+| Siyambulela Tapiwa Kudumba    | s232094217     | Present   |
+
+───────────────────────────────────────────────────────────────────
+SUBMISSION DATE
+───────────────────────────────────────────────────────────────────
+
+12 October 2026
+
+───────────────────────────────────────────────────────────────────
+VIDEO LINK
+───────────────────────────────────────────────────────────────────
+
+YouTube link:
+https://youtu.be/4NfWGsWZZ4c
+Note: The video is set to Unlisted. No login is required to view.
+
+───────────────────────────────────────────────────────────────────
+GITHUB REPOSITORY
+───────────────────────────────────────────────────────────────────
+
+https://github.com/SiyambulelaKudumba/fitcore-gym
+
+Note: Repository is public. Code is identical to what is included
+in the ZIP submission.
+
+───────────────────────────────────────────────────────────────────
+PROJECT SUMMARY
+───────────────────────────────────────────────────────────────────
+
+A full-stack Gym Management System built with:
+
+  Backend:   ASP.NET Core 8 Web API
+             Entity Framework Core (Code-First)
+             ASP.NET Identity + JWT Bearer tokens
+             Microsoft SQL Server
+
+  Frontend:  React
+             React-Bootstrap
+             Axios
+             React Router
+
+  Roles:     Administrator, Personal Trainer, Gym Member
+
+───────────────────────────────────────────────────────────────────
+SUBMISSION CONTENTS
+───────────────────────────────────────────────────────────────────
+
+  Backend/          ASP.NET Core 8 Web API source
+  frontend/         React application source
+  database/         fitcore.sql — SQL Server database script
+  Documentation/    Project documentation (PDF)
+                    ERD.png — Entity Relationship Diagram
+                    UseCase.png — Use Case Diagram
+                    GROUPINFO.txt — this file
+  contracts/        API design documents (DTOs, endpoints, enums)
+  README.md         Project overview and setup instructions
+
+═══════════════════════════════════════════════════════════════════
+                   End of Group Information Document
+═══════════════════════════════════════════════════════════════════
