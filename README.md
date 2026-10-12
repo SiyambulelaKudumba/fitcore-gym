@@ -30,6 +30,29 @@ ITP2020 Assignment 2 – Group Project (Option A)
 
 ### Backend
 
-```bash
-cd Backend/FitCore.Api
-dotnet run
+Run the API from the backend folder:
+
+    cd Backend/FitCore.Api
+    dotnet run
+
+### Frontend
+
+Run the React app from the frontend folder:
+
+    cd frontend
+    npm install
+    npm start
+
+### Test Credentials
+
+| Role    | Email                  | Password     |
+|---------|------------------------|--------------|
+| Admin   | admin@fitcore.co.za    | Admin@123    |
+| Trainer | trainer@fitcore.co.za  | Trainer@123  |
+| Member  | member@fitcore.co.za   | Member@123   |
+
+## Documentation
+
+- `FitCore_Gym_Documentation.pdf` — Project overview, ERD, Use Case Diagram, Research Section
+- `Group_Information.pdf` — Group members and video link
+- `database/fitcore.sql` — Database script
