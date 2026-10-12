@@ -1,109 +1,54 @@
-import { useEffect, useState } from 'react';
-import { Container, Tabs, Tab, Table, Spinner, Alert } from 'react-bootstrap';
-import memberService from '../services/memberService';
-import trainerService from '../services/trainerService';
+import { useEffect, useState } from "react";
+import { Container, Tabs, Tab } from "react-bootstrap";
+import Table from "../components/Table";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorAlert from "../components/ErrorAlert";
+import { getMembers } from "../services/memberService";
+import { getTrainers } from "../services/trainerService";
 
-const UsersByTypePage = () => {
+export default function UsersByTypePage() {
   const [members, setMembers] = useState([]);
   const [trainers, setTrainers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      setError('');
-      try {
-        const [membersData, trainersData] = await Promise.all([
-          memberService.getAll(),
-          trainerService.getAll(),
-        ]);
-        setMembers(membersData);
-        setTrainers(trainersData);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Could not load users.');
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    Promise.all([getMembers(), getTrainers()])
+      .then(([m, t]) => { setMembers(m); setTrainers(t); })
+      .catch((err) => setError(err.response?.data?.message || "Failed to load users."))
+      .finally(() => setLoading(false));
   }, []);
 
+  const memberCols = [
+    { key: "memberNumber", label: "Member #" },
+    { key: "firstName", label: "First Name" },
+    { key: "lastName", label: "Last Name" },
+    { key: "email", label: "Email" },
+    { key: "membershipType", label: "Membership" },
+  ];
+
+  const trainerCols = [
+    { key: "staffNumber", label: "Staff #" },
+    { key: "firstName", label: "First Name" },
+    { key: "lastName", label: "Last Name" },
+    { key: "email", label: "Email" },
+    { key: "specialization", label: "Specialization" },
+  ];
+
   return (
-    <Container className="mt-4">
-      <h2 className="mb-4">Users by Type</h2>
-
-      {error && <Alert variant="danger">{error}</Alert>}
-
-      {loading ? (
-        <div className="text-center py-5"><Spinner animation="border" /></div>
-      ) : (
+    <Container className="page-container">
+      <h2>Users by Type</h2>
+      <ErrorAlert message={error} onClose={() => setError("")} />
+      {loading ? <LoadingSpinner /> : (
         <Tabs defaultActiveKey="members" className="mb-3">
-          <Tab eventKey="members" title={`Gym Members (${members.length})`}>
-            <Table striped bordered hover responsive>
-              <thead>
-                <tr>
-                  <th>Member #</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Membership</th>
-                </tr>
-              </thead>
-              <tbody>
-                {members.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" className="text-center">No members.</td>
-                  </tr>
-                ) : (
-                  members.map((m) => (
-                    <tr key={m.id}>
-                      <td>{m.memberNumber}</td>
-                      <td>{m.firstName} {m.lastName}</td>
-                      <td>{m.email}</td>
-                      <td>{m.phoneNumber || '—'}</td>
-                      <td>{m.membershipType}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </Table>
+          <Tab eventKey="members" title={`Members (${members.length})`}>
+            <Table columns={memberCols} data={members} />
           </Tab>
-
-          <Tab eventKey="trainers" title={`Personal Trainers (${trainers.length})`}>
-            <Table striped bordered hover responsive>
-              <thead>
-                <tr>
-                  <th>Staff #</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Specialization</th>
-                </tr>
-              </thead>
-              <tbody>
-                {trainers.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" className="text-center">No trainers.</td>
-                  </tr>
-                ) : (
-                  trainers.map((t) => (
-                    <tr key={t.id}>
-                      <td>{t.staffNumber}</td>
-                      <td>{t.firstName} {t.lastName}</td>
-                      <td>{t.email}</td>
-                      <td>{t.phoneNumber || '—'}</td>
-                      <td>{t.specialization}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </Table>
+          <Tab eventKey="trainers" title={`Trainers (${trainers.length})`}>
+            <Table columns={trainerCols} data={trainers} />
           </Tab>
         </Tabs>
       )}
     </Container>
   );
-};
-
-export default UsersByTypePage;
+}
