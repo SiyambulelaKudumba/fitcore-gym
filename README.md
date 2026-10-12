@@ -3,32 +3,33 @@
 ITP2020 Assignment 2 – Group Project (Option A)
 
 ## Tech Stack
-- Backend: ASP.NET Core 8 Web API, EF Core (Code-First), SQL Server
-- Frontend: React, React-Bootstrap
-- Auth: ASP.NET Identity + JWT
-- Database: Microsoft SQL Server
+
+- **Backend:** ASP.NET Core 8 Web API, EF Core (Code-First), SQL Server
+- **Frontend:** React, React-Bootstrap
+- **Auth:** ASP.NET Identity + JWT
+- **Database:** Microsoft SQL Server
 
 ## Group Members
-| Name | Student Number | Role |
-|------|----------------|------|
-|      |                | M1 – Backend Lead |
-|      |                | M2 – Backend Features |
-|      |                | M3 – Frontend Lead |
-|      |                | M4 – Frontend Features + Docs |
+
+**Group Name:** FitCore Gym Team
+
+| Name                          | Student Number | Role                            |                |
+|-------------------------------|----------------|--------------------------------|                |
+| Tristan Zeta Hayhurst         | s231156669     | M1 – Backend Lead                            |                |
+| Justin Christopher Agnew      | s229355595     | M2 – Backend Features                        |                |
+| Jayden Ronaldo Agnew          | 229356184      | M3 – Frontend Lead                            |                |
+| Siyambulela Tapiwa Kudumba    | s232094217     | M4 – Frontend Features + Docs                 |                |
 
 ## Roles
-- **Admin** – manages members, trainers, programmes; assigns trainers to members and members to programmes; searches users.
-- **Trainer** – views assigned members and their programmes; creates/updates workout plans and tasks.
-- **Member** – views programme, plans, tasks; updates task status; filters tasks by status.
 
-## Folder Structure
-- `/contracts` – frozen API, DTO, entity, and auth contracts
-- `/backend` – ASP.NET Core 8 Web API
-- `/frontend` – React + React-Bootstrap app
-- `/docs` – documentation, ERD, use case diagram, setup guide
+- **Admin** — Manages members, trainers, and programmes; assigns trainers to members; assigns members to programmes; lists users by type.
+- **Trainer** — Views assigned members and their programmes; creates and manages workout plans and tasks.
+- **Member** — Views assigned programme, plans, and tasks; updates task status; filters tasks by status.
 
-## Setup
-See `/docs/setup.md`.
+## Getting Started
 
-## Due Date
-12 October 2026, 23:59
+### Backend
+
+```bash
+cd Backend/FitCore.Api
+dotnet run
