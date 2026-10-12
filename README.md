@@ -13,12 +13,12 @@ ITP2020 Assignment 2 – Group Project (Option A)
 
 **Group Name:** FitCore Gym Team
 
-| Name                          | Student Number | Role                            |                |
-|-------------------------------|----------------|--------------------------------|                |
-| Tristan Zeta Hayhurst         | s231156669     | M1 – Backend Lead                            |                |
-| Justin Christopher Agnew      | s229355595     | M2 – Backend Features                        |                |
-| Jayden Ronaldo Agnew          | 229356184      | M3 – Frontend Lead                            |                |
-| Siyambulela Tapiwa Kudumba    | s232094217     | M4 – Frontend Features + Docs                 |                |
+| Name                          | Student Number | Role                          |
+|-------------------------------|----------------|-------------------------------|
+| Tristan Zeta Hayhurst         | s231156669     | M1 – Backend Lead             |
+| Justin Christopher Agnew      | s229355595     | M2 – Backend Features         |
+| Jayden Ronaldo Agnew          | 229356184      | M3 – Frontend Lead            |
+| Siyambulela Tapiwa Kudumba    | s232094217     | M4 – Frontend Features + Docs |
 
 ## Roles
 
